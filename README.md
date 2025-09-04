@@ -43,11 +43,7 @@ Create a comprehensive, production-ready platform that leverages advanced machin
 - **Random Forest**: Ensemble of decision trees
 
 ### 📊 **Model Performance**
-Based on extensive training and evaluation:
-- **CatBoost**: RMSE ~68,532
-- **LightGBM**: RMSE ~68,009  
-- **XGBoost**: RMSE ~69,696
-- **Random Forest**: RMSE ~75,206
+All models are trained and evaluated with the objective to minimize Root Mean Square Error (RMSE) for optimal prediction accuracy.
 
 ---
 
