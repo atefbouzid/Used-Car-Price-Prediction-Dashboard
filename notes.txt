@@ -1,0 +1,75 @@
+before preprocessing : 
+
+this gives as an insights about the data quality;
+
+Learning rate set to 0.088355
+0:	learn: 74127.4223746	total: 183ms	remaining: 3m 3s
+100:	learn: 68308.1055719	total: 681ms	remaining: 6.07s
+200:	learn: 67086.2334295	total: 1.17s	remaining: 4.66s
+300:	learn: 65537.1516637	total: 1.63s	remaining: 3.79s
+400:	learn: 63946.8402049	total: 2.09s	remaining: 3.12s
+500:	learn: 62668.9930880	total: 2.55s	remaining: 2.54s
+600:	learn: 61539.4378007	total: 3.02s	remaining: 2s
+700:	learn: 60455.2538220	total: 3.51s	remaining: 1.5s
+800:	learn: 59500.3290693	total: 3.98s	remaining: 989ms
+900:	learn: 58499.1023768	total: 4.44s	remaining: 488ms
+999:	learn: 57649.8541998	total: 4.89s	remaining: 0us
+CatBoostRegressor RMSE: 77883.75427793869
+XGBRegressor RMSE: 80178.5234375
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.002085 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 1451
+[LightGBM] [Info] Number of data points in the train set: 130088, number of used features: 11
+[LightGBM] [Info] Start training from score 40661.292525
+LGBMRegressor RMSE: 77595.51195438937
+RandomForestRegressor RMSE: 80243.11813234302
+
+version 1 : just filling the missing values and a label encoder and dropping the id col
+
+Learning rate set to 0.090444
+0:	learn: 79070.3523631	total: 8.39ms	remaining: 8.38s
+100:	learn: 73112.9942375	total: 573ms	remaining: 5.1s
+200:	learn: 71816.6909137	total: 1.1s	remaining: 4.37s
+300:	learn: 70588.7551442	total: 1.63s	remaining: 3.78s
+400:	learn: 69558.1749456	total: 2.15s	remaining: 3.22s
+500:	learn: 68686.5100707	total: 2.68s	remaining: 2.67s
+600:	learn: 67671.6678130	total: 3.2s	remaining: 2.13s
+700:	learn: 66738.0891913	total: 3.73s	remaining: 1.59s
+800:	learn: 65836.0191708	total: 4.25s	remaining: 1.06s
+900:	learn: 65046.7434664	total: 4.77s	remaining: 524ms
+999:	learn: 64334.1619425	total: 5.29s	remaining: 0us
+CatBoostRegressor RMSE: 68660.19757383986
+XGBRegressor RMSE: 70942.578125
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.002634 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 1257
+[LightGBM] [Info] Number of data points in the train set: 150826, number of used features: 11
+[LightGBM] [Info] Start training from score 43890.785316
+LGBMRegressor RMSE: 68040.5616624241
+RandomForestRegressor RMSE: 75253.81689532204
+
+version 2 : +feature engineering , One Hot encoder for features like accident 
+Learning rate set to 0.090444
+0:	learn: 79061.6491866	total: 7.91ms	remaining: 7.9s
+100:	learn: 73113.7468865	total: 600ms	remaining: 5.34s
+200:	learn: 71747.6484133	total: 1.2s	remaining: 4.75s
+300:	learn: 70490.3165702	total: 1.81s	remaining: 4.2s
+400:	learn: 69704.8242543	total: 2.35s	remaining: 3.52s
+500:	learn: 68795.2749602	total: 2.9s	remaining: 2.88s
+600:	learn: 67997.7687162	total: 3.43s	remaining: 2.28s
+700:	learn: 67276.9662175	total: 4.01s	remaining: 1.71s
+800:	learn: 66561.0776841	total: 4.54s	remaining: 1.13s
+900:	learn: 65649.8114973	total: 5.09s	remaining: 559ms
+999:	learn: 64897.0046599	total: 5.62s	remaining: 0us
+CatBoostRegressor RMSE: 68532.0601364936
+XGBRegressor RMSE: 69696.59375
+[LightGBM] [Warning] Found whitespace in feature_names, replace with underlines
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.003084 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 1333
+[LightGBM] [Info] Number of data points in the train set: 150826, number of used features: 17
+[LightGBM] [Info] Start training from score 43890.785316
+LGBMRegressor RMSE: 68009.77956742239
+RandomForestRegressor RMSE: 75206.50296393727
