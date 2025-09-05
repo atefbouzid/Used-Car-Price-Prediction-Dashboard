@@ -64,3 +64,12 @@ RandomForestRegressor RMSE: 75206.50296393727, NRMSE: 0.0255
 
 
 version 3 : using optuna for hyperparameter tuning
+Best CatBoost RMSE: 67889.82
+Best XGBoost RMSE: 67920.55
+Best LightGBM RMSE: 67790.92
+Best Random Forest RMSE: 68568.73
+
+Best CatBoost NRMSE: 1.5468
+Best XGBoost NRMSE: 1.5475
+Best LightGBM NRMSE: 1.5445
+Best Random Forest NRMSE: 1.5623
