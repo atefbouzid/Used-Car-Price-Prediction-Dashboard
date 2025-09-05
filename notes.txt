@@ -50,26 +50,17 @@ LGBMRegressor RMSE: 68040.5616624241
 RandomForestRegressor RMSE: 75253.81689532204
 
 version 2 : +feature engineering , One Hot encoder for features like accident 
-Learning rate set to 0.090444
-0:	learn: 79061.6491866	total: 7.91ms	remaining: 7.9s
-100:	learn: 73113.7468865	total: 600ms	remaining: 5.34s
-200:	learn: 71747.6484133	total: 1.2s	remaining: 4.75s
-300:	learn: 70490.3165702	total: 1.81s	remaining: 4.2s
-400:	learn: 69704.8242543	total: 2.35s	remaining: 3.52s
-500:	learn: 68795.2749602	total: 2.9s	remaining: 2.88s
-600:	learn: 67997.7687162	total: 3.43s	remaining: 2.28s
-700:	learn: 67276.9662175	total: 4.01s	remaining: 1.71s
-800:	learn: 66561.0776841	total: 4.54s	remaining: 1.13s
-900:	learn: 65649.8114973	total: 5.09s	remaining: 559ms
-999:	learn: 64897.0046599	total: 5.62s	remaining: 0us
-CatBoostRegressor RMSE: 68532.0601364936
-XGBRegressor RMSE: 69696.59375
+CatBoostRegressor RMSE: 68532.0601364936, NRMSE: 0.0232
+XGBRegressor RMSE: 69696.59375, NRMSE: 0.0236
 [LightGBM] [Warning] Found whitespace in feature_names, replace with underlines
-[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.003084 seconds.
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.004110 seconds.
 You can set `force_row_wise=true` to remove the overhead.
 And if memory is not enough, you can set `force_col_wise=true`.
 [LightGBM] [Info] Total Bins 1333
 [LightGBM] [Info] Number of data points in the train set: 150826, number of used features: 17
 [LightGBM] [Info] Start training from score 43890.785316
-LGBMRegressor RMSE: 68009.77956742239
-RandomForestRegressor RMSE: 75206.50296393727
+LGBMRegressor RMSE: 68009.77956742239, NRMSE: 0.0230
+RandomForestRegressor RMSE: 75206.50296393727, NRMSE: 0.0255
+
+
+version 3 : using optuna for hyperparameter tuning
