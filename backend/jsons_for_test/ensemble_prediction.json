@@ -1,0 +1,17 @@
+{
+  "car_data": {
+    "brand": "BMW",
+    "model": "3 Series",
+    "model_year": 2021,
+    "milage": 25000,
+    "fuel_type": "Gasoline",
+    "engine": "2.0L 4-Cylinder Turbo",
+    "transmission": "Automatic",
+    "ext_col": "Black",
+    "int_col": "Black",
+    "accident": "None reported",
+    "clean_title": "Yes"
+  },
+  "selected_models": ["xgboost", "catboost", "lightgbm", "random_forest"],
+  "use_ensemble": true
+}

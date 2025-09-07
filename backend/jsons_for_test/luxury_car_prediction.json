@@ -1,0 +1,17 @@
+{
+  "car_data": {
+    "brand": "Mercedes-Benz",
+    "model": "E-Class",
+    "model_year": 2022,
+    "milage": 15000,
+    "fuel_type": "Gasoline",
+    "engine": "nd ",
+    "transmission": "Automatic",
+    "ext_col": "White",
+    "int_col": "Brown",
+    "accident": "None reported",
+    "clean_title": "Yes"
+  },
+  "selected_models": ["catboost", "xgboost"],
+  "use_ensemble": true
+}

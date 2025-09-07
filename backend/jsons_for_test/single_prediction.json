@@ -1,0 +1,17 @@
+{
+  "car_data": {
+    "brand": "Toyota",
+    "model": "Camry",
+    "model_year": 2020,
+    "milage": 50000,
+    "fuel_type": "Gasoline",
+    "engine": "2.5L 4-Cylinder",
+    "transmission": "Automatic",
+    "ext_col": "White",
+    "int_col": "Black",
+    "accident": "None reported",
+    "clean_title": "Yes"
+  },
+  "selected_models": ["xgboost"],
+  "use_ensemble": false
+}

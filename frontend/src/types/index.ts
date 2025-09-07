@@ -1,4 +1,4 @@
-export type ModelType = 'catboost' | 'lgbm' | 'xgboost' | 'randomforest'
+export type ModelType = 'catboost' | 'lightgbm' | 'xgboost' | 'random_forest'
 
 export interface CarFeatures {
   brand: string
@@ -17,7 +17,6 @@ export interface CarFeatures {
 export interface PredictionResult {
   model: ModelType
   prediction: number
-  confidence: number
 }
 
 export interface ModelInfo {
@@ -25,4 +24,47 @@ export interface ModelInfo {
   name: string
   description: string
   color: string
+}
+
+// Backend API Types
+export interface ApiResponse<T> {
+  data?: T
+  error?: string
+  message?: string
+}
+
+export interface PredictionRequest {
+  car_data: CarFeatures
+  selected_models: ModelType[]
+  use_ensemble: boolean
+}
+
+export interface PredictionResponse {
+  individual_predictions: Record<ModelType, number>
+  selected_models: ModelType[]
+  ensemble_prediction?: number
+}
+
+export interface ModelInfoResponse {
+  model_name: string
+  model_type: string
+  is_fitted: boolean
+  has_predict: boolean
+  n_estimators?: number
+  max_depth?: number
+  learning_rate?: number
+}
+
+export interface AvailableModelsResponse {
+  available_models: ModelType[]
+  models_count: number
+  models_info: Record<ModelType, ModelInfoResponse>
+}
+
+export interface HealthResponse {
+  status: 'success' | 'error'
+  message: string
+  models_loaded: boolean
+  available_models?: ModelType[]
+  models_count?: number
 }

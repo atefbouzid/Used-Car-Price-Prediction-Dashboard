@@ -1,0 +1,17 @@
+{
+  "car_data": {
+    "brand": "Ford",
+    "model": "Focus",
+    "model_year": 2015,
+    "milage": 120000,
+    "fuel_type": "Gasoline",
+    "engine": "2.0L 4-Cylinder",
+    "transmission": "Manual",
+    "ext_col": "Blue",
+    "int_col": "Black",
+    "accident": "At least 1 accident or damage reported",
+    "clean_title": "No"
+  },
+  "selected_models": ["random_forest", "lightgbm"],
+  "use_ensemble": true
+}

@@ -1,0 +1,307 @@
+{
+  "test_requests": {
+    "description": "Comprehensive test requests for the Used Car Price Prediction API",
+    "base_url": "http://localhost:8000",
+    "endpoints": {
+      "root": {
+        "method": "GET",
+        "url": "/",
+        "description": "Get API information and available endpoints"
+      },
+      "health": {
+        "method": "GET", 
+        "url": "/health",
+        "description": "Health check with model status"
+      },
+      "available_models": {
+        "method": "GET",
+        "url": "/available_models", 
+        "description": "Get list of available trained models"
+      },
+      "model_info": {
+        "method": "GET",
+        "url": "/model_info/{model_name}",
+        "description": "Get detailed information about a specific model",
+        "examples": [
+          "/model_info/xgboost",
+          "/model_info/catboost", 
+          "/model_info/lightgbm",
+          "/model_info/random_forest"
+        ]
+      },
+      "predict": {
+        "method": "POST",
+        "url": "/predict",
+        "description": "Make car price predictions using selected models"
+      }
+    },
+    "sample_requests": {
+      "single_model_prediction": {
+        "description": "Predict using a single model (XGBoost)",
+        "request": {
+          "car_data": {
+            "brand": "Toyota",
+            "model": "Camry",
+            "model_year": 2020,
+            "milage": 50000,
+            "fuel_type": "Gasoline",
+            "engine": "2.5L 4-Cylinder",
+            "transmission": "Automatic",
+            "ext_col": "White",
+            "int_col": "Black",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["xgboost"],
+          "use_ensemble": false
+        },
+        "expected_response": {
+          "individual_predictions": {
+            "xgboost": 25000.50
+          },
+          "selected_models": ["xgboost"]
+        }
+      },
+      "multiple_models_prediction": {
+        "description": "Predict using multiple models without ensemble",
+        "request": {
+          "car_data": {
+            "brand": "Honda",
+            "model": "Civic",
+            "model_year": 2019,
+            "milage": 75000,
+            "fuel_type": "Gasoline",
+            "engine": "1.5L 4-Cylinder",
+            "transmission": "CVT",
+            "ext_col": "Silver",
+            "int_col": "Gray",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["xgboost", "catboost", "lightgbm"],
+          "use_ensemble": false
+        },
+        "expected_response": {
+          "individual_predictions": {
+            "xgboost": 18000.25,
+            "catboost": 18200.50,
+            "lightgbm": 17950.75
+          },
+          "selected_models": ["xgboost", "catboost", "lightgbm"]
+        }
+      },
+      "ensemble_prediction": {
+        "description": "Predict using multiple models with ensemble averaging",
+        "request": {
+          "car_data": {
+            "brand": "BMW",
+            "model": "3 Series",
+            "model_year": 2021,
+            "milage": 25000,
+            "fuel_type": "Gasoline",
+            "engine": "2.0L 4-Cylinder Turbo",
+            "transmission": "Automatic",
+            "ext_col": "Black",
+            "int_col": "Black",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["xgboost", "catboost", "lightgbm", "random_forest"],
+          "use_ensemble": true
+        },
+        "expected_response": {
+          "individual_predictions": {
+            "xgboost": 35000.00,
+            "catboost": 35200.50,
+            "lightgbm": 34800.25,
+            "random_forest": 35100.75
+          },
+          "selected_models": ["xgboost", "catboost", "lightgbm", "random_forest"],
+          "ensemble_prediction": 35025.38
+        }
+      },
+      "luxury_car_prediction": {
+        "description": "Predict price for a luxury car",
+        "request": {
+          "car_data": {
+            "brand": "Mercedes-Benz",
+            "model": "E-Class",
+            "model_year": 2022,
+            "milage": 15000,
+            "fuel_type": "Gasoline",
+            "engine": "3.0L 6-Cylinder Turbo",
+            "transmission": "Automatic",
+            "ext_col": "White",
+            "int_col": "Brown",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["catboost", "xgboost"],
+          "use_ensemble": true
+        }
+      },
+      "old_car_prediction": {
+        "description": "Predict price for an older car with high mileage",
+        "request": {
+          "car_data": {
+            "brand": "Ford",
+            "model": "Focus",
+            "model_year": 2015,
+            "milage": 120000,
+            "fuel_type": "Gasoline",
+            "engine": "2.0L 4-Cylinder",
+            "transmission": "Manual",
+            "ext_col": "Blue",
+            "int_col": "Black",
+            "accident": "At least 1 accident or damage reported",
+            "clean_title": "No"
+          },
+          "selected_models": ["random_forest", "lightgbm"],
+          "use_ensemble": true
+        }
+      },
+      "hybrid_car_prediction": {
+        "description": "Predict price for a hybrid car",
+        "request": {
+          "car_data": {
+            "brand": "Toyota",
+            "model": "Prius",
+            "model_year": 2020,
+            "milage": 40000,
+            "fuel_type": "Hybrid",
+            "engine": "1.8L 4-Cylinder Hybrid",
+            "transmission": "CVT",
+            "ext_col": "Green",
+            "int_col": "Gray",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["xgboost", "catboost", "lightgbm", "random_forest"],
+          "use_ensemble": true
+        }
+      },
+      "electric_car_prediction": {
+        "description": "Predict price for an electric car",
+        "request": {
+          "car_data": {
+            "brand": "Tesla",
+            "model": "Model 3",
+            "model_year": 2021,
+            "milage": 30000,
+            "fuel_type": "Electric",
+            "engine": "Electric Motor",
+            "transmission": "Automatic",
+            "ext_col": "Red",
+            "int_col": "Black",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["catboost", "xgboost"],
+          "use_ensemble": false
+        }
+      },
+      "truck_prediction": {
+        "description": "Predict price for a pickup truck",
+        "request": {
+          "car_data": {
+            "brand": "Ford",
+            "model": "F-150",
+            "model_year": 2019,
+            "milage": 60000,
+            "fuel_type": "Gasoline",
+            "engine": "3.5L 6-Cylinder Turbo",
+            "transmission": "Automatic",
+            "ext_col": "White",
+            "int_col": "Black",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["random_forest", "xgboost", "lightgbm"],
+          "use_ensemble": true
+        }
+      },
+      "suv_prediction": {
+        "description": "Predict price for an SUV",
+        "request": {
+          "car_data": {
+            "brand": "Honda",
+            "model": "CR-V",
+            "model_year": 2020,
+            "milage": 35000,
+            "fuel_type": "Gasoline",
+            "engine": "1.5L 4-Cylinder Turbo",
+            "transmission": "CVT",
+            "ext_col": "Gray",
+            "int_col": "Black",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["catboost", "lightgbm"],
+          "use_ensemble": true
+        }
+      },
+      "sports_car_prediction": {
+        "description": "Predict price for a sports car",
+        "request": {
+          "car_data": {
+            "brand": "Chevrolet",
+            "model": "Corvette",
+            "model_year": 2021,
+            "milage": 8000,
+            "fuel_type": "Gasoline",
+            "engine": "6.2L 8-Cylinder",
+            "transmission": "Manual",
+            "ext_col": "Yellow",
+            "int_col": "Black",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["xgboost", "catboost", "lightgbm", "random_forest"],
+          "use_ensemble": true
+        }
+      }
+    },
+    "error_test_cases": {
+      "invalid_model": {
+        "description": "Test with invalid model name",
+        "request": {
+          "car_data": {
+            "brand": "Toyota",
+            "model": "Camry",
+            "model_year": 2020,
+            "milage": 50000,
+            "fuel_type": "Gasoline",
+            "engine": "2.5L 4-Cylinder",
+            "transmission": "Automatic",
+            "ext_col": "White",
+            "int_col": "Black",
+            "accident": "None reported",
+            "clean_title": "Yes"
+          },
+          "selected_models": ["invalid_model"],
+          "use_ensemble": false
+        },
+        "expected_error": "Models not found: ['invalid_model']"
+      },
+      "missing_required_fields": {
+        "description": "Test with missing required car data fields",
+        "request": {
+          "car_data": {
+            "brand": "Toyota",
+            "model": "Camry"
+          },
+          "selected_models": ["xgboost"],
+          "use_ensemble": false
+        },
+        "expected_error": "Validation error for missing required fields"
+      }
+    },
+    "curl_examples": {
+      "health_check": "curl -X GET http://localhost:8000/health",
+      "available_models": "curl -X GET http://localhost:8000/available_models",
+      "model_info": "curl -X GET http://localhost:8000/model_info/xgboost",
+      "single_prediction": "curl -X POST http://localhost:8000/predict -H \"Content-Type: application/json\" -d @single_prediction.json",
+      "ensemble_prediction": "curl -X POST http://localhost:8000/predict -H \"Content-Type: application/json\" -d @ensemble_prediction.json"
+    }
+  }
+}

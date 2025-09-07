@@ -1,22 +1,28 @@
 'use client'
 
-import { ModelType, PredictionResult } from '@/types'
-import { DollarSign, TrendingUp, Target, Brain, Zap, TreePine, Loader2, BarChart3 } from 'lucide-react'
+import { ModelType, PredictionResponse } from '@/types'
+import { DollarSign, TrendingUp, Target, Brain, Zap, TreePine, Loader2, BarChart3, AlertCircle } from 'lucide-react'
 
 interface PredictionResultsProps {
-  predictions: PredictionResult[]
+  predictionResponse: PredictionResponse | null
   selectedModels: ModelType[]
   isLoading: boolean
+  error: string | null
 }
 
 const modelInfo = {
   catboost: { name: 'CatBoost', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', icon: Target },
-  lgbm: { name: 'LightGBM', color: 'text-green-400', bgColor: 'bg-green-500/10', icon: Zap },
+  lightgbm: { name: 'LightGBM', color: 'text-green-400', bgColor: 'bg-green-500/10', icon: Zap },
   xgboost: { name: 'XGBoost', color: 'text-blue-400', bgColor: 'bg-blue-500/10', icon: Brain },
-  randomforest: { name: 'Random Forest', color: 'text-purple-400', bgColor: 'bg-purple-500/10', icon: TreePine }
+  random_forest: { name: 'Random Forest', color: 'text-purple-400', bgColor: 'bg-purple-500/10', icon: TreePine }
 }
 
-export default function PredictionResults({ predictions, selectedModels, isLoading }: PredictionResultsProps) {
+export default function PredictionResults({ 
+  predictionResponse, 
+  selectedModels, 
+  isLoading, 
+  error 
+}: PredictionResultsProps) {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -26,13 +32,10 @@ export default function PredictionResults({ predictions, selectedModels, isLoadi
     }).format(price)
   }
 
-  const calculateEnsemble = () => {
-    if (predictions.length === 0) return 0
-    return predictions.reduce((sum, pred) => sum + pred.prediction, 0) / predictions.length
-  }
-
-  const ensemblePrice = calculateEnsemble()
-  const showEnsemble = predictions.length > 1
+  const individualPredictions = predictionResponse?.individual_predictions || {}
+  const ensemblePrediction = predictionResponse?.ensemble_prediction
+  const hasPredictions = Object.keys(individualPredictions).length > 0
+  const showEnsemble = ensemblePrediction !== undefined && Object.keys(individualPredictions).length > 1
 
   return (
     <div className="bg-dark-800 rounded-xl p-6 border border-dark-700">
@@ -50,7 +53,17 @@ export default function PredictionResults({ predictions, selectedModels, isLoadi
         </div>
       )}
 
-      {!isLoading && predictions.length === 0 && (
+      {error && (
+        <div className="flex items-center justify-center py-8">
+          <AlertCircle className="w-6 h-6 text-red-500 mr-2" />
+          <div className="text-center">
+            <p className="text-red-400 font-medium">Prediction failed</p>
+            <p className="text-dark-400 text-sm mt-1">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {!isLoading && !error && !hasPredictions && (
         <div className="text-center py-12">
           <DollarSign className="w-12 h-12 text-dark-500 mx-auto mb-4" />
           <p className="text-dark-400 text-lg mb-2">No predictions yet</p>
@@ -60,10 +73,10 @@ export default function PredictionResults({ predictions, selectedModels, isLoadi
         </div>
       )}
 
-      {!isLoading && predictions.length > 0 && (
+      {!isLoading && !error && hasPredictions && (
         <div className="space-y-4">
           {/* Ensemble Result (if multiple models) */}
-          {showEnsemble && (
+          {showEnsemble && ensemblePrediction && (
             <div className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 rounded-lg p-4 border border-orange-500/30">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-2">
@@ -72,12 +85,12 @@ export default function PredictionResults({ predictions, selectedModels, isLoadi
                   </div>
                   <div>
                     <h3 className="font-semibold text-white">Ensemble Average</h3>
-                    <p className="text-orange-300 text-xs">{predictions.length} models combined</p>
+                    <p className="text-orange-300 text-xs">{Object.keys(individualPredictions).length} models combined</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-bold text-orange-400">
-                    {formatPrice(ensemblePrice)}
+                    {formatPrice(ensemblePrediction)}
                   </div>
                   <div className="text-orange-300 text-xs">Recommended</div>
                 </div>
@@ -90,14 +103,15 @@ export default function PredictionResults({ predictions, selectedModels, isLoadi
 
           {/* Individual Model Results */}
           <div className="space-y-3">
-            {predictions.map((result) => {
-              const model = modelInfo[result.model]
+            {Object.entries(individualPredictions).map(([modelName, prediction]) => {
+              const model = modelInfo[modelName as ModelType]
+              if (!model) return null
+              
               const Icon = model.icon
-              const confidencePercentage = Math.round(result.confidence * 100)
               
               return (
                 <div
-                  key={result.model}
+                  key={modelName}
                   className={`rounded-lg p-4 border border-dark-600 ${model.bgColor}`}
                 >
                   <div className="flex items-center justify-between mb-3">
@@ -108,27 +122,27 @@ export default function PredictionResults({ predictions, selectedModels, isLoadi
                       <div>
                         <h3 className="font-semibold text-white">{model.name}</h3>
                         <p className="text-dark-300 text-xs">
-                          Confidence: {confidencePercentage}%
+                          Individual prediction
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
                       <div className={`text-xl font-bold ${model.color}`}>
-                        {formatPrice(result.prediction)}
+                        {formatPrice(prediction)}
                       </div>
                     </div>
                   </div>
                   
-                  {/* Confidence Bar */}
+                  {/* Progress Bar */}
                   <div className="w-full bg-dark-700 rounded-full h-1.5">
                     <div 
                       className={`h-1.5 rounded-full transition-all duration-1000 ease-out ${
-                        result.model === 'catboost' ? 'bg-yellow-500' :
-                        result.model === 'lgbm' ? 'bg-green-500' :
-                        result.model === 'xgboost' ? 'bg-blue-500' :
+                        modelName === 'catboost' ? 'bg-yellow-500' :
+                        modelName === 'lightgbm' ? 'bg-green-500' :
+                        modelName === 'xgboost' ? 'bg-blue-500' :
                         'bg-purple-500'
                       }`}
-                      style={{ width: `${confidencePercentage}%` }}
+                      style={{ width: '100%' }}
                     />
                   </div>
                 </div>
@@ -137,26 +151,27 @@ export default function PredictionResults({ predictions, selectedModels, isLoadi
           </div>
 
           {/* Price Range Analysis */}
-          {predictions.length > 1 && (
+          {Object.keys(individualPredictions).length > 1 && (
             <div className="mt-6 p-4 bg-dark-900 rounded-lg border border-dark-600">
               <h4 className="text-sm font-medium text-dark-300 mb-3">Price Range Analysis</h4>
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <p className="text-dark-400 text-xs">Minimum</p>
                   <p className="text-red-400 font-semibold">
-                    {formatPrice(Math.min(...predictions.map(p => p.prediction)))}
+                    {formatPrice(Math.min(...Object.values(individualPredictions)))}
                   </p>
                 </div>
                 <div>
                   <p className="text-dark-400 text-xs">Average</p>
                   <p className="text-orange-400 font-semibold">
-                    {formatPrice(ensemblePrice)}
+                    {ensemblePrediction ? formatPrice(ensemblePrediction) : 
+                     formatPrice(Object.values(individualPredictions).reduce((a, b) => a + b, 0) / Object.values(individualPredictions).length)}
                   </p>
                 </div>
                 <div>
                   <p className="text-dark-400 text-xs">Maximum</p>
                   <p className="text-green-400 font-semibold">
-                    {formatPrice(Math.max(...predictions.map(p => p.prediction)))}
+                    {formatPrice(Math.max(...Object.values(individualPredictions)))}
                   </p>
                 </div>
               </div>
@@ -166,8 +181,9 @@ export default function PredictionResults({ predictions, selectedModels, isLoadi
           {/* Disclaimer */}
           <div className="mt-4 p-3 bg-dark-900 rounded-lg border border-dark-600">
             <p className="text-dark-400 text-xs">
-              <strong>Disclaimer:</strong> These predictions are estimates based on machine learning models. 
-              Actual market prices may vary due to condition, location, demand, and other factors.
+              <strong>Disclaimer:</strong> These predictions are estimates based on machine learning models trained on sampled data. 
+              The prices may be incorrect and not reflect real market values due to the limited training dataset used. 
+              Actual market prices may vary significantly due to condition, location, demand, and other factors not captured in the training data.
             </p>
           </div>
         </div>

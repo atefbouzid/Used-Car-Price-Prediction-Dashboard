@@ -1,0 +1,17 @@
+{
+  "car_data": {
+    "brand": "Toyota",
+    "model": "Prius",
+    "model_year": 2020,
+    "milage": 40000,
+    "fuel_type": "Hybrid",
+    "engine": "1.8L 4-Cylinder Hybrid",
+    "transmission": "CVT",
+    "ext_col": "Green",
+    "int_col": "Gray",
+    "accident": "None reported",
+    "clean_title": "Yes"
+  },
+  "selected_models": ["xgboost", "catboost", "lightgbm", "random_forest"],
+  "use_ensemble": true
+}
