@@ -123,10 +123,10 @@ The application includes comprehensive exploratory data analysis:
 
 ## 🖥️ Application Screenshots
 
-![Dashboard Overview](imgs/screenshot.png)
+![Dashboard Overview](imgs/screenshot1.png)
 *Main dashboard interface showing model selection and prediction results*
 
-![Prediction Results](imgs/secreenshot2.png)
+![Prediction Results](imgs/screenshot2.png)
 *Detailed prediction results with ensemble analysis and price range*
 
 ## 🛠️ Technologies Used
